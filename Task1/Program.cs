@@ -24,15 +24,14 @@ namespace Task1 {
             for(var i = 1; i < insertionNumbers.Length; i += 1) {
                 var pivotValue = insertionNumbers[i];
 
-                for(var j = 0; j <= i; j += 1) {
-                    if(j == i || insertionNumbers[i - j - 1] <= pivotValue) {
-                        insertionNumbers[i - j] = pivotValue;
+                var offset = 0;
+                while(offset < i && insertionNumbers[i - offset - 1] > pivotValue) {
+                    insertionNumbers[i - offset] = insertionNumbers[i - offset - 1];
 
-                        break;
-                    } else {
-                        insertionNumbers[i - j] = insertionNumbers[i - j - 1];
-                    }
+                    offset += 1;
                 }
+
+                insertionNumbers[i - offset] = pivotValue;
             }
             insertionStopwatch.Stop();
 
@@ -52,15 +51,14 @@ namespace Task1 {
                 for(var i = gap; i < shellNumbers.Length; i += 1) {
                     var pivotValue = shellNumbers[i];
 
-                    for(var j = 0; j <= i - gap + 1; j += gap) {
-                        if(j >= i - gap + 1 || shellNumbers[i - j - gap] <= pivotValue) {
-                            shellNumbers[i - j] = pivotValue;
+                    var offset = 0;
+                    while(offset < i - (gap - 1) && shellNumbers[i - offset - gap] > pivotValue) {
+                        shellNumbers[i - offset] = shellNumbers[i - offset - gap];
 
-                            break;
-                        } else {
-                            shellNumbers[i - j] = shellNumbers[i - j - gap];
-                        }
+                        offset += gap;
                     }
+
+                    shellNumbers[i - offset] = pivotValue;
                 }
             }
             shellStopwatch.Stop();
