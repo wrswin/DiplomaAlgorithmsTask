@@ -28,6 +28,8 @@ namespace Task2 {
                 numbers[i] = int.Parse(lines[i]);
             }
 
+            int runs = 100;
+
             var sortedNumbers = (int[])numbers.Clone();
             var gaps = new int[] { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // https://oeis.org/A102549
 
@@ -53,12 +55,14 @@ namespace Task2 {
             var linearIndices = new int[searchNumbers.Length];
 
             linearStopwatch.Start();
-            for(var i = 0; i < searchNumbers.Length; i += 1) {
-                for(var j = 0; j < sortedNumbers.Length; j += 1) {
-                    if(sortedNumbers[j] == searchNumbers[i]) {
-                        linearIndices[i] = j;
+            for(var k = 0; k < runs; k += 1) {
+                for(var i = 0; i < searchNumbers.Length; i += 1) {
+                    for(var j = 0; j < sortedNumbers.Length; j += 1) {
+                        if(sortedNumbers[j] == searchNumbers[i]) {
+                            linearIndices[i] = j;
 
-                        break;
+                            break;
+                        }
                     }
                 }
             }
@@ -68,16 +72,18 @@ namespace Task2 {
             var binaryIndices = new int[searchNumbers.Length];
 
             binaryStopwatch.Start();
-            for(var i = 0; i < searchNumbers.Length; i += 1) {
-                binaryIndices[i] = BinarySearchStep(sortedNumbers, searchNumbers[i], 0, sortedNumbers.Length);
+            for(var j = 0; j < runs; j += 1) {
+                for(var i = 0; i < searchNumbers.Length; i += 1) {
+                    binaryIndices[i] = BinarySearchStep(sortedNumbers, searchNumbers[i], 0, sortedNumbers.Length);
+                }
             }
             binaryStopwatch.Stop();
 
             var linearTime = linearStopwatch.Elapsed;
             var binaryTime = binaryStopwatch.Elapsed;
 
-            var linearMillisPerElement = linearTime.TotalMilliseconds / sortedNumbers.Length / searchNumbers.Length;
-            var binaryMillisPerElement = binaryTime.TotalMilliseconds / sortedNumbers.Length / searchNumbers.Length;
+            var linearMillisPerElement = linearTime.TotalMilliseconds / sortedNumbers.Length / searchNumbers.Length / runs;
+            var binaryMillisPerElement = binaryTime.TotalMilliseconds / sortedNumbers.Length / searchNumbers.Length / runs;
 
             var actualTimeRatio = linearTime.TotalSeconds / binaryTime.TotalSeconds;
 
